@@ -1,3 +1,4 @@
+
 import User from "../models/User.js";
 import generateReferralCode from "../utils/generateReferralCode.js";
 
@@ -11,10 +12,10 @@ export const submitSurvey = async (req, res) => {
       yearOfStudy,
       branch,
       referralCode,
+      ...answers  
     } = req.body;
-  
-    const existingEmail = await User.findOne({ email });
 
+    const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({
         success: false,
@@ -23,12 +24,33 @@ export const submitSurvey = async (req, res) => {
     }
 
     const existingPhone = await User.findOne({ phone });
-
     if (existingPhone) {
       return res.status(400).json({
         success: false,
         message: "Phone already registered",
       });
+    }
+
+    let referrer = null;
+
+    
+    if (referralCode) {
+      referrer = await User.findOne({ referralCode });
+
+      if (!referrer) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid referral code",
+        });
+      }
+
+      
+      if (referrer.email === email || referrer.phone === phone) {
+        return res.status(400).json({
+          success: false,
+          message: "Self-referral is not allowed",
+        });
+      }
     }
 
     const myReferralCode = await generateReferralCode();
@@ -41,22 +63,18 @@ export const submitSurvey = async (req, res) => {
       yearOfStudy,
       branch,
       referralCode: myReferralCode,
+      answers,   
     });
 
-    if (referralCode) {
-      const referrer = await User.findOne({
-        referralCode,
-      });
+    
+    if (referrer) {
+      referrer.referralCount += 1;
 
-      if (referrer) {
-        referrer.referralCount += 1;
-
-        if (referrer.referralCount >= 3) {
-          referrer.rewardStatus = "UNLOCKED";
-        }
-
-        await referrer.save();
+      if (referrer.referralCount >= 3) {
+        referrer.rewardStatus = "UNLOCKED";
       }
+
+      await referrer.save();
     }
 
     res.status(201).json({

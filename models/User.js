@@ -49,6 +49,11 @@ const userSchema = new mongoose.Schema(
       enum: ["PENDING", "UNLOCKED"],
       default: "PENDING",
     },
+    answers: {
+  type: Map,
+  of: mongoose.Schema.Types.Mixed,
+  default: {},
+},
   },
   {
     timestamps: true,

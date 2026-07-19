@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
 
+
 // Register User
 export const registerUser = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ export const registerUser = async (req, res) => {
       branch,
     } = req.body;
 
-
+  
 
     const existingUser = await User.findOne({
       $or: [{ email }, { phone }],
