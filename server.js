@@ -15,7 +15,9 @@ import paymentRoutes from "./routes/payment.routes.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+// const port = process.env.PORT || 5000;
+
+const PORT = process.env.PORT || 5000;
 
 // Database Connection
 connectDB();
@@ -51,6 +53,6 @@ app.get("/", (req, res) => {
 });
 
 // Server Start
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
