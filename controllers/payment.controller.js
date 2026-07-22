@@ -1,4 +1,4 @@
-import Payment from "../models/Payment.js";
+import Payment from "../models/Payment.js";     
 import User from "../models/User.js";
 
 export const createPayment = async (
@@ -27,6 +27,8 @@ export const createPayment = async (
       });
     }
 
+
+    
     const payment =
       await Payment.create({
         user: userId,

@@ -7,9 +7,9 @@ export const getRewardStatus = async (
   res
 ) => {
   try {
-    const { userId } = req.params;
-
-    const reward = await Reward.findOne({
+    const { userId } = req.params;  
+                
+    const reward = await Reward.findOne({  
       user: userId,
     }).populate(
       "user",

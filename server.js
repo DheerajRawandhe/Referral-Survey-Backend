@@ -26,7 +26,9 @@ connectDB();
 // app.use(cors());
 
 app.use(cors({
-  origin: ["http://localhost:5173",  "https://medhashala-form.vercel.app" ],
+  origin: ["http://localhost:5173"
+    // ,  "https://medhashala-form.vercel.app" 
+  ],
   credentials: true,
 }));
 
